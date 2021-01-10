@@ -1,0 +1,73 @@
+@charset "UTF-8";
+#number-up-down-game{
+  padding:30px 10px 10px 10px;
+}
+#print-info{
+  margin-top:20px;
+  text-align: center;
+  height:60px;
+}
+#print-info span{
+  font-size:1.4rem;
+}
+#character-select {
+  width:100%;
+  max-width:600px;
+  margin:0 auto;
+}
+#character-select input{
+  display:none;
+}
+#character-select .picture{
+
+  display:block;
+  width:49%;
+  margin:0 auto;
+}
+#character-select #elsa-pic{
+  float:left;
+}
+#character-select #anna-pic{
+  float:right;
+}
+.off{
+  display:none;
+}
+.on{
+  display:block;
+}
+#number-input-interface{
+  max-width:400px;
+  margin:20px auto;
+}
+#number-input-interface *{
+  vertical-align: middle;
+}
+#input-num{
+  width:69.2%;
+  height:36px;
+  box-shadow: 0 0 5px 1px rgba(0,0,0,0.2);
+  text-align: center;
+}
+#submit-num{
+  width:29.5%;
+  height:36px;
+  color:#fff;
+  background:rgb(63, 17, 124);
+  border-radius:3px;
+  font-size:1.1rem;
+}
+#game-start-btn, #retry{
+  width:100%;
+  max-width:400px;
+  display:block;
+  margin:20px auto;
+  background:rgb(63, 17, 124);
+  color:#fff;
+  font-size:1.2rem;
+  height:50px;
+  border-radius:25px;
+}
+#retry{
+  display:none;
+}
