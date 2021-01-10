@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <link rel="stylesheet" href="css/reset.css"> 
   <link rel="stylesheet" href="css/number_up_down.css"> 
   <title>Document</title>
@@ -10,17 +10,15 @@
 <body>
   <div id="number-up-down-game">
     <div id="character-select" class="float-clear">
-      <label for="elsa" class="picture" id="elsa-pic"><img src="img/select_elsa.jpg" alt="엘사" width="100%"></label>
-      <label for="anna" class="picture" id="anna-pic"><img src="img/select_anna.jpg" alt="안나" width="100%"></label>
+      <img class="picture" id="elsa-pic" src="img/default_elsa.jpg">
+      <img class="picture" id="anna-pic" src="img/default_anna.jpg">
     </div>
     <div id="print-info">좋아하는 분을 선택해주세요.</div>
-    <div id="game-interface" class="off">
-      <div id="number-input-interface" class="off">
-        <input type="text" id="input-num" onkeyup="executeGameByEnter()">
-        <button type="button" id="submit-num" >입력</button>
-      </div>
-      <button id="game-start-btn">좋아요! 같이 해요!</button>
+    <div id="number-input-interface">
+      <input type="text" id="input-num" onkeyup="executeGameByEnter()">
+      <button type="button" id="submit-num" >입력</button>
     </div>
+    <button id="game-start-btn">좋아요! 같이 해요!</button>
   </div>
   <button id="retry" onclick="init()">다시하기</button>
   <script src="js/number_up_down.js"></script> 

@@ -19,22 +19,17 @@
   display:none;
 }
 #character-select .picture{
-
+  float:left;
   display:block;
-  width:49%;
+  width:48%;
+  margin:3px;
+}
+#character-select .picture.selected{
+  float:none;
   margin:0 auto;
 }
-#character-select #elsa-pic{
-  float:left;
-}
-#character-select #anna-pic{
-  float:right;
-}
-.off{
+#character-select .picture.not-selected{
   display:none;
-}
-.on{
-  display:block;
 }
 #number-input-interface{
   max-width:400px;
@@ -67,7 +62,4 @@
   font-size:1.2rem;
   height:50px;
   border-radius:25px;
-}
-#retry{
-  display:none;
 }
