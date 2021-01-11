@@ -14,12 +14,12 @@ var gameMode = {
 }
 var gameMessages = {
   elsa:{
-    start:"엘붕이 안녕! <br> 나랑 숫자 업앤다운 할래?",
-    win:"<span>헉...</span><br>마음을 꿰뚫어보다니 소오름...<br>",
+    start:"엘붕이 안녕!<br>나랑 숫자 업다운 할래?<br>1~100 사이에서 내가 생각한 숫자를 맞춰봐.",
+    win:"<span>헉...</span><br>내 마음을 꿰뚫어보다니 소오름...<br>",
     lost:"<span>바보!! 못 맞추겠지?</span><br>어차피 기대도 안 했어.<br>"
   },
   anna:{
-    start:"안붕이 안녕! <br> 나랑 숫자 업앤다운 할래?",
+    start:"안붕이 안녕!<br>나랑 숫자 업다운 할래?<br>1~100 사이에서 내가 생각한 숫자를 맞춰봐.",
     win:"<span>헉...</span><br>내 마음을 꿰뚫어보다니 소오름...<br>",
     lost:"<span>바보!! 못 맞추겠지?</span><br>어차피 기대도 안 했어.<br>"
   }
@@ -123,7 +123,7 @@ function gameStart(){
   generateAnswer(gameState.answerRange.min, gameState.answerRange.max);
   gameState.gameExecute = true;
   gameStartBtn.style.display = "none";
-  printInfo.innerHTML = gameState.answerRange.min+" ~ "+ gameState.answerRange.max+" 사이의 숫자만 입력해.";
+  printInfo.innerHTML = gameState.answerRange.min+" ~ "+ gameState.answerRange.max+" 사이의 숫자만 입력해.<br>기회는 딱 여섯 번이야!";
   console.log("정답: "+ randomNum); // 정답 출력
 }
 function generateAnswer(min, max){
@@ -142,7 +142,7 @@ function printGameResult(val, count){
     youWin(val);
   }
   else if(randomNum > val && 100 >= val && count>=0){
-    printInfo.innerHTML = '<span>'+val+'? 업이야!</span><br>남은 횟수: '+count;
+    printInfo.innerHTML = '<span>'+val+'? 업이야! 그거보다 커.</span><br>남은 횟수: '+count;
   }
   else if(randomNum < val && 100 >= val && count>=0){
     printInfo.innerHTML = '<span>'+val+'? 다운! 더 낮아!</span><br>남은 횟수: '+count;
