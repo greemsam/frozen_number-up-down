@@ -162,20 +162,20 @@ function checkTry(inputVal){
 }
 function youWin(val){
   gameState.gameExecute = false;
-  printInfo.innerHTML = messagesByMode.win+"정답: "+val;
-  picture.forEach(function(item){
-   item.setAttribute('src', picturesByMode.win);   
-  })  
   hideNumInput();
+  picture.forEach(function(item){
+    item.setAttribute('src', picturesByMode.win);   
+  }) 
+  printInfo.innerHTML = messagesByMode.win+"정답: "+val;
   showRetry();
 }
 function youLost(){
   gameState.gameExecute = false;
-  printInfo.innerHTML = messagesByMode.lost+"정답: "+randomNum;
+  hideNumInput();
   picture.forEach(function(item){
     item.setAttribute('src', picturesByMode.lost);   
-   })  
-  hideNumInput();
+  })  
+  printInfo.innerHTML = messagesByMode.lost+"정답: "+randomNum;  
   showRetry();
 }
 function showRetry(){
