@@ -75,7 +75,9 @@ function initSelectPic(){
   picture.forEach(function(item){
     item.classList.remove('selected');
     item.classList.remove('not-selected');
-    item.addEventListener('click', setGameMode);
+    if(gameState.selectCharacter === true){
+      item.addEventListener('click', setGameMode);
+    }
   });
   elsaPicture.setAttribute('src', 'img/default_elsa.jpg');
   annaPicture.setAttribute('src', 'img/default_anna.jpg');
@@ -91,16 +93,18 @@ function hideNumInput(){
   numInputInterface.style.display = "none";
 }
 function setGameMode(e){
-  gameState.selectCharacter = false;
-  gameStartBtn.style.display = "block";
-  switch(e.target){
-    case elsaPicture : 
-      setElsaMode('elsa');
-      break;
-    case annaPicture : 
-      setAnnaMode('anna');
-      break;
+  if(gameState.selectCharacter === true){
+    gameStartBtn.style.display = "block";
+    switch(e.target){
+      case elsaPicture : 
+        setElsaMode('elsa');
+        break;
+      case annaPicture : 
+        setAnnaMode('anna');
+        break;
+    }
   }
+  gameState.selectCharacter = false;
 }
 function setElsaMode(mode){
   gameMode.modeName = mode;
@@ -117,14 +121,15 @@ function setAnnaMode(mode){
   annaPicture.classList.add('selected');
   messagesByMode = gameMessages.anna;
   picturesByMode = statePictures.anna; 
-} 
+}
 function gameStart(){
+  gameState.gameExecute = true;
   showInput();
   generateAnswer(gameState.answerRange.min, gameState.answerRange.max);
-  gameState.gameExecute = true;
   gameStartBtn.style.display = "none";
   printInfo.innerHTML = gameState.answerRange.min+" ~ "+ gameState.answerRange.max+" 사이의 숫자만 입력해.<br>기회는 딱 여섯 번이야!";
   console.log("정답: "+ randomNum); // 정답 출력
+  console.log(gameState.deathCount, gameState.gameExecute)
 }
 function generateAnswer(min, max){
   randomNum = Math.floor(Math.random() * (max - min)) + min;
@@ -132,50 +137,42 @@ function generateAnswer(min, max){
 function playGame(){
   if(gameState.gameExecute === true){
     var inputValueToNum = Number(input.value);
-    printGameResult(inputValueToNum, gameState.deathCount);
-    checkTry(inputValueToNum);
+    if(gameState.deathCount > 0){
+      inputValueToNum === randomNum ? youWin(inputValueToNum) : tryAgain(inputValueToNum, gameState.deathCount);
+    }
+    else if(gameState.deathCount <= 0){
+      gameState.deathCount = 0;
+      youLost();
+    }
     input.value = '';
   }
+  console.log(gameState.deathCount, gameState.gameExecute)
 }
-function printGameResult(val, count){
-  if(randomNum === val && count>=0){
-    youWin(val);
-  }
-  else if(randomNum > val && 100 >= val && count>=0){
+function tryAgain(val, count){
+  if(randomNum > val && gameState.answerRange.min <= val && gameState.answerRange.max >= val){
+    gameState.deathCount--;
     printInfo.innerHTML = '<span>'+val+'? 업이야! 그거보다 커.</span><br>남은 횟수: '+count;
   }
-  else if(randomNum < val && 100 >= val && count>=0){
-    printInfo.innerHTML = '<span>'+val+'? 다운! 더 낮아!</span><br>남은 횟수: '+count;
-  }
-  else if(randomNum !== val && count<=0){
-    count = 0;
-    youLost();
-  }
-}
-function checkTry(inputVal){
-  if (inputVal>0 && inputVal<=100){
+  else if(randomNum < val && gameState.answerRange.min <= val && gameState.answerRange.max >= val){
     gameState.deathCount--;
+    printInfo.innerHTML = '<span>'+val+'? 다운! 더 낮아!</span><br>남은 횟수: '+count;
   }
   else{
     printInfo.innerHTML = '응? 제대로 입력한 거 맞아? <br> 1~100 사이 숫자만 입력해줘.';
   }
 }
 function youWin(val){
-  gameState.gameExecute = false;
-  hideNumInput();
-  picture.forEach(function(item){
-    item.setAttribute('src', picturesByMode.win);   
-  }) 
+  gameState.gameExecute = false,
+  picture.forEach(function(item){item.setAttribute('src', picturesByMode.win);}) 
   printInfo.innerHTML = messagesByMode.win+"정답: "+val;
+  hideNumInput();
   showRetry();
 }
 function youLost(){
-  gameState.gameExecute = false;
-  hideNumInput();
-  picture.forEach(function(item){
-    item.setAttribute('src', picturesByMode.lost);   
-  })  
+  gameState.gameExecute = false,
+  picture.forEach(function(item){item.setAttribute('src', picturesByMode.lost);})  
   printInfo.innerHTML = messagesByMode.lost+"정답: "+randomNum;  
+  hideNumInput();
   showRetry();
 }
 function showRetry(){
