@@ -1,6 +1,7 @@
 'use strict';
 
 var gameState = {
+  modeName:'',
   selectCharacter:true,
   gameExecute:false,
   deathCount:5,
@@ -8,9 +9,6 @@ var gameState = {
     min:1,
     max:100
   }
-}
-var gameMode = {
-  modeName:'',
 }
 var gameMessages = {
   elsa:{
@@ -39,6 +37,8 @@ var statePictures = {
 var messagesByMode={};
 var picturesByMode={};
 var randomNum;
+var characterSelect = document.getElementById("character-select");
+var selectedCharacter = document.getElementById("selected-character")
 var picture = document.querySelectorAll(".picture");
 var elsaPicture = document.getElementById("elsa-pic");
 var annaPicture = document.getElementById("anna-pic");
@@ -61,9 +61,10 @@ function executeGameByEnter(){
 }
 function init(){
   initGameState();
-  initSelectPic();
-  initButtons();
-  hideRetry();
+  initCharacterSelect();
+  numInputInterface.style.display = "none";
+  gameStartBtn.style.display = "none";
+  retry.style.display = "none";
   printInfo.innerHTML = "좋아하는 분을 선택해주세요.";
 }
 function initGameState(){
@@ -71,60 +72,43 @@ function initGameState(){
   gameState.gameExecute = false;
   gameState.deathCount = 5;
 }
-function initSelectPic(){
-  picture.forEach(function(item){
-    item.classList.remove('selected');
-    item.classList.remove('not-selected');
+
+function initCharacterSelect(){
+  characterSelect.style.display = 'block';
+  selectedCharacter.style.display = 'none';
+  picture.forEach((item)=>{
     if(gameState.selectCharacter === true){
       item.addEventListener('click', setGameMode);
     }
   });
-  elsaPicture.setAttribute('src', 'img/default_elsa.jpg');
-  annaPicture.setAttribute('src', 'img/default_anna.jpg');
-}
-function initButtons(){
-  numInputInterface.style.display = "none";
-  gameStartBtn.style.display = "none";
-}
-function showInput(){
-  numInputInterface.style.display = "block";    
-}
-function hideNumInput(){
-  numInputInterface.style.display = "none";
 }
 function setGameMode(e){
   if(gameState.selectCharacter === true){
     gameStartBtn.style.display = "block";
     switch(e.target){
       case elsaPicture : 
-        setElsaMode('elsa');
+        modeSet('elsa');
         break;
       case annaPicture : 
-        setAnnaMode('anna');
+        modeSet('anna');
         break;
     }
   }
   gameState.selectCharacter = false;
 }
-function setElsaMode(mode){
-  gameMode.modeName = mode;
-  printInfo.innerHTML = gameMessages.elsa.start;
-  annaPicture.classList.add('not-selected');
-  elsaPicture.classList.add('selected');
-  messagesByMode = gameMessages.elsa;
-  picturesByMode = statePictures.elsa; 
+function modeSet(mode){
+  gameState.modeName = mode;
+  characterSelect.style.display = 'none';
+  selectedCharacter.style.display = 'block'
+  selectedCharacter.innerHTML = '<img class="picture" src="img/default_' + mode + '.jpg">';
+  printInfo.innerHTML = gameMessages[mode].start;
+  messagesByMode = gameMessages[mode];
+  picturesByMode = statePictures[mode]; 
 }
-function setAnnaMode(mode){
-  gameMode.modeName = mode;
-  printInfo.innerHTML = gameMessages.anna.start;
-  elsaPicture.classList.add('not-selected');
-  annaPicture.classList.add('selected');
-  messagesByMode = gameMessages.anna;
-  picturesByMode = statePictures.anna; 
-}
+
 function gameStart(){
   gameState.gameExecute = true;
-  showInput();
+  numInputInterface.style.display = "block";  
   generateAnswer(gameState.answerRange.min, gameState.answerRange.max);
   gameStartBtn.style.display = "none";
   printInfo.innerHTML = gameState.answerRange.min+" ~ "+ gameState.answerRange.max+" 사이의 숫자만 입력해.<br>기회는 딱 여섯 번이야!";
@@ -138,11 +122,11 @@ function playGame(){
   if(gameState.gameExecute === true){
     var inputValueToNum = Number(input.value);
     if(gameState.deathCount > 0){
-      inputValueToNum === randomNum ? youWin(inputValueToNum) : tryAgain(inputValueToNum, gameState.deathCount);
+      inputValueToNum === randomNum ? showGameResult('win', inputValueToNum) : tryAgain(inputValueToNum, gameState.deathCount);
     }
     else if(gameState.deathCount <= 0){
       gameState.deathCount = 0;
-      youLost();
+      showGameResult('lost');
     }
     input.value = '';
   }
@@ -161,23 +145,15 @@ function tryAgain(val, count){
     printInfo.innerHTML = '응? 제대로 입력한 거 맞아? <br> 1~100 사이 숫자만 입력해줘.';
   }
 }
-function youWin(val){
+function showGameResult(result, val = ''){
   gameState.gameExecute = false,
-  picture.forEach(function(item){item.setAttribute('src', picturesByMode.win);}) 
-  printInfo.innerHTML = messagesByMode.win+"정답: "+val;
-  hideNumInput();
-  showRetry();
-}
-function youLost(){
-  gameState.gameExecute = false,
-  picture.forEach(function(item){item.setAttribute('src', picturesByMode.lost);})  
-  printInfo.innerHTML = messagesByMode.lost+"정답: "+randomNum;  
-  hideNumInput();
-  showRetry();
-}
-function showRetry(){
+  selectedCharacter.childNodes[0].setAttribute('src', 'img/'+ result + '_' + gameState.modeName + '.jpg');
+  numInputInterface.style.display = "none";
   retry.style.display = "block";
-}
-function hideRetry(){
-  retry.style.display = "none";
+  switch(result){
+    case 'win': printInfo.innerHTML = messagesByMode[result]+"정답: "+ val;
+    break;
+    case 'lost': printInfo.innerHTML = messagesByMode[result]+"정답: "+randomNum;
+    break;  
+  }
 }

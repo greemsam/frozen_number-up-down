@@ -24,12 +24,10 @@
   width:48%;
   margin:3px;
 }
-#character-select .picture.selected{
-  float:none;
-  margin:0 auto;
-}
-#character-select .picture.not-selected{
-  display:none;
+#selected-character .picture{
+  display:block;
+  width:300px;
+  margin:3px auto;
 }
 #number-input-interface{
   max-width:400px;
