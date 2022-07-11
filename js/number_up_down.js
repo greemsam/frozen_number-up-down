@@ -126,7 +126,7 @@ function playGame(){
     }
     else if(gameState.deathCount <= 0){
       gameState.deathCount = 0;
-      showGameResult('lost');
+      inputValueToNum === randomNum ? showGameResult('win', inputValueToNum) : showGameResult('lost');
     }
     input.value = '';
   }
